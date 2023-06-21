@@ -10,6 +10,6 @@ void setup() {
 }
 
 void loop() {
-  // controller.goToAngle(1, 100, 1, 0, 0);
+  controller.goToAngle(1, 100, 1, 0, 0);
   delay(1000);
 }
