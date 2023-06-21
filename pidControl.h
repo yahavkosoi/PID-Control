@@ -19,12 +19,22 @@ class pidControl{
     double previousError;
     
     double out;
+    int tempOut;
+    int processValue;
+
+    int speedR;
+    int speedL;
 
     
   public:
     pidControl(int inR1, int inR2, int enR, int inL1, int inL2, int enL);
     void rightMotor(int speed);
+    void leftMotor(int speed);
+    void stopMoving();
+    void move(int rightSpeed, int leftSpeed);
     double PIDcalc(double PV, int sp, double Kp, double Ki, double Kd);
+    int getYaw();
+    void goToAngle(int deg, int speed, double Kp, double Ki, double Kd);
     
 };
 

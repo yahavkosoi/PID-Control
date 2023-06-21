@@ -1,13 +1,15 @@
 #include "pidControl.h"
 
+pidControl controller(2, 3, 5, 6, 7, 8);
+
 void setup() {
   Serial.begin(9600);
-
-  pidControl controller(2, 3, 5, 6, 7, 8);
-  controller.rightMotor(200);
+  
+  
+  
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-
+  // controller.goToAngle(1, 100, 1, 0, 0);
+  delay(1000);
 }
