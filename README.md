@@ -36,12 +36,32 @@ PID controller for Arduino
 | :-------- | :------- | :------------------------- |
 | `enL` | `int` | **Required**. enable pin left motor|
 
+#### turn to angle
 
+```
+  myPidController.goToAngle(deg, speed, Kp, Ki, Kd);
+```
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `deg` | `int` | **Required**. turning angle|
+
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `speed` | `int` | **Required**. speed of turn|
+
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `Kp` | `double` | **Required**. propotional gain|
+
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `Ki` | `double` | **Required**. integral gain|
+
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `Kd` | `double` | **Required**. derivative gain|
 
 ## Authors
 
 - [@yahavkosoi](https://www.github.com/yahavkosoi)
 
-
-
-# pidControl
