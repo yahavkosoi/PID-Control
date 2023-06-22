@@ -35,7 +35,7 @@ class pidControl{
     double PIDcalc(double PV, int sp, double Kp, double Ki, double Kd);
     int getYaw();
     void goToAngle(int deg, int speed, double Kp, double Ki, double Kd);
-    
+    void steer(int deg, int speed, double Kp, double Ki, double Kd);
 };
 
 #endif

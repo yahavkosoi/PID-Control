@@ -1,0 +1,5 @@
+{
+    "port": "/dev/tty.usbmodem2101",
+    "board": "arduino:avr:uno",
+    "sketch": "pidControl.ino"
+}

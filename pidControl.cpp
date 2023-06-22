@@ -109,6 +109,10 @@ double pidControl::PIDcalc(double PV, int sp, double Kp, double Ki, double Kd){
 
 // go to angle using PID.
 void pidControl::goToAngle(int deg, int speed, double Kp, double Ki, double Kd){
+  // reset variables used in other functions.
+  integral = 0;
+  previousError = 0;
+
   // set process value to current yaw angle.
   processValue = getYaw();
 
@@ -152,6 +156,48 @@ void pidControl::goToAngle(int deg, int speed, double Kp, double Ki, double Kd){
     move(speedR, speedL);
   }
 }
+
+// drives at an angle (deg) while correcting itself.
+void pidControl::steer(int deg, int speed, double Kp, double Ki, double Kd) {
+  // set processValue to current yaw angle.
+  processValue = getYaw();
+
+  // set tempOut to PIDcalc output.
+  tempOut = PIDcalc(processValue, deg, Kp, Ki, Kd);
+
+  // set the motors' speeds to speed + out and speed - out.
+  speedR = speed - tempOut;
+  speedL = speed + tempOut;
+
+  // cant have speed over 255.
+  if (speedR > 255) {
+    speedR = 255;
+  }
+
+  // cant have speed less than -255.
+  else if (speedR < -255) {
+    speedR = -255;
+  }
+
+  // cant have speed over 255.
+  if (speedL > 255) {
+    speedL = 255;
+  }
+
+  // cant have speed less than -255.
+  else if (speedL < -255) {
+    speedL = -255;
+  }
+
+  // for testing purposes print the speed of each motor.
+    Serial.print(speedR);
+    Serial.print(" <- speedR, speedL -> ");
+    Serial.println(speedL);
+
+  // move motors' at the correct speed to correct the error.
+  move(speedR, speedL);
+}
+
 // get current yaw angle.
 int pidControl::getYaw(){
   // for testing return yaw angle of 0˚.
