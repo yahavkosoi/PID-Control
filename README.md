@@ -1,9 +1,4 @@
 
-# PID controller
-
-PID controller for Arduino
-
-
 ## Functions
 
 #### initialization
@@ -47,11 +42,11 @@ PID controller for Arduino
 
 | Parameter | Type     | Description                |
 | :-------- | :------- | :------------------------- |
-| `speed` | `int` | **Required**. speed of turn|
+| `speed` | `int` | **Required**. turning speed|
 
 | Parameter | Type     | Description                |
 | :-------- | :------- | :------------------------- |
-| `Kp` | `double` | **Required**. propotional gain|
+| `Kp` | `double` | **Required**. proportional gain|
 
 | Parameter | Type     | Description                |
 | :-------- | :------- | :------------------------- |
@@ -61,7 +56,28 @@ PID controller for Arduino
 | :-------- | :------- | :------------------------- |
 | `Kd` | `double` | **Required**. derivative gain|
 
-## Authors
+#### turn to angle while driving
 
-- [@yahavkosoi](https://www.github.com/yahavkosoi)
+```
+  myPidController.steer(deg, speed, Kp, Ki, Kd);
+```
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `deg` | `int` | **Required**. turning angle|
+
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `speed` | `int` | **Required**. driving speed|
+
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `Kp` | `double` | **Required**. proportional gain|
+
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `Ki` | `double` | **Required**. integral gain|
+
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `Kd` | `double` | **Required**. derivative gain|
 
