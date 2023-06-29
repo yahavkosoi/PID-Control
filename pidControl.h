@@ -17,6 +17,9 @@ class pidControl{
     double derivative;
     double error;
     double previousError;
+    long previousTime;
+    long currentTime;
+    long deltaTime;
     
     double out;
     int tempOut;

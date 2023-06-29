@@ -13,6 +13,9 @@ double integral = 0;
 double derivative;
 double error;
 double previousError = 0;
+long previousTime = millis()/1000;
+long currentTime = millis()/1000;
+long deltaTime;
 double out;
 
 // define variables for goToAngle.
@@ -91,18 +94,26 @@ void pidControl::stopMoving(){
 
 // calculate PID output.
 double pidControl::PIDcalc(double PV, int sp, double Kp, double Ki, double Kd){
+  // set current time to elapsed time in seconds.
+  currentTime = millis()/1000;
+
+  // set delateTime to the change of time in seconds since the last iteration.
+  deltaTime = currentTime-previousTime;
+
   // set error to set_point - process_value.
   error = sp - PV;
   // add error to integral.
   integral += error;
-  // set derivative to ∆error.
-  derivative = error - previousError;
+  // set derivative to ∆error/∆time.
+  derivative = (error - previousError)/deltaTime;
 
   // multiple each part of PID by Kp, Ki, Kd.
   out = error*Kp + integral*Ki + derivative*Kd;
 
   // set previous error to current error.
   previousError = error;
+  // set previous time to elapsed time in seconds.
+  previousTime = millis()/1000; 
 
   return out;
 }
