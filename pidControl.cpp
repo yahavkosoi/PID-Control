@@ -99,7 +99,7 @@ double pidControl::PIDcalc(double PV, int sp, double Kp, double Ki, double Kd){
   derivative = error - previousError;
 
   // multiple each part of PID by Kp, Ki, Kd.
-  out = error*Kp + integral*Ki + derivative*Ki;
+  out = error*Kp + integral*Ki + derivative*Kd;
 
   // set previous error to current error.
   previousError = error;
@@ -194,7 +194,7 @@ void pidControl::steer(int deg, int speed, double Kp, double Ki, double Kd) {
     Serial.print(" <- speedR, speedL -> ");
     Serial.println(speedL);
 
-  // move motors' at the correct speed to correct the error.
+  // move motors at the correct speed to correct the error.
   move(speedR, speedL);
 }
 
