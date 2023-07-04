@@ -17,9 +17,9 @@ class pidControl{
     double derivative;
     double error;
     double previousError;
-    long previousTime;
-    long currentTime;
-    long deltaTime;
+    double previousTime;
+    double currentTime;
+    double deltaTime;
     
     double out;
     int tempOut;
@@ -34,7 +34,7 @@ class pidControl{
     void rightMotor(int speed);
     void leftMotor(int speed);
     void stopMoving();
-    void move(int rightSpeed, int leftSpeed);
+    void (int rightSpeed, int leftSpeed);
     double PIDcalc(double PV, int sp, double Kp, double Ki, double Kd);
     int getYaw();
     void goToAngle(int deg, int speed, double Kp, double Ki, double Kd);

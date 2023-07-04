@@ -13,14 +13,14 @@ double integral = 0;
 double derivative;
 double error;
 double previousError = 0;
-long previousTime = millis()/1000;
-long currentTime = millis()/1000;
-long deltaTime;
+double previousTime = millis();
+double currentTime = millis();
+double deltaTime;
 double out;
 
 // define variables for goToAngle.
-int tempOut;
-int processValue;
+double tempOut;
+double processValue;
 int speedR;
 int speedL;
 
@@ -82,6 +82,9 @@ void pidControl::leftMotor(int speed) {
 void pidControl::move(int rightSpeed, int leftSpeed) {
   rightMotor(rightSpeed);
   leftMotor(leftSpeed);
+  Serial.print(rightSpeed);
+  Serial.print(" | ")
+  Serial.println(leftSpeed);
 }
 
 // stop motors.
@@ -95,17 +98,21 @@ void pidControl::stopMoving(){
 // calculate PID output.
 double pidControl::PIDcalc(double PV, int sp, double Kp, double Ki, double Kd){
   // set current time to elapsed time in seconds.
-  currentTime = millis()/1000;
+  currentTime = millis()/1000.0;
 
   // set delateTime to the change of time in seconds since the last iteration.
   deltaTime = currentTime-previousTime;
-
+  if (deltaTime == 0) {
+    deltaTime = 0.01;
+  }
   // set error to set_point - process_value.
   error = sp - PV;
   // add error to integral.
-  integral += error;
+  integral += error * deltaTime;
+  if (integral > 255 || integral < -255) {integral = 0;}
   // set derivative to ∆error/∆time.
   derivative = (error - previousError)/deltaTime;
+  if (derivative > 255 || derivative < -255) {derivative = 0;}
 
   // multiple each part of PID by Kp, Ki, Kd.
   out = error*Kp + integral*Ki + derivative*Kd;
@@ -113,7 +120,17 @@ double pidControl::PIDcalc(double PV, int sp, double Kp, double Ki, double Kd){
   // set previous error to current error.
   previousError = error;
   // set previous time to elapsed time in seconds.
-  previousTime = millis()/1000; 
+  previousTime = millis()/1000.0; 
+
+  // Serial.println(derivative);
+
+  // test prints.
+  // Serial.print("integral: ");
+  // Serial.print(integral);
+  // Serial.print(" | derivative: ");
+  // Serial.print(derivative);
+  // Serial.print(" | error: ");
+  // Serial.println(error);
 
   return out;
 }
@@ -201,9 +218,9 @@ void pidControl::steer(int deg, int speed, double Kp, double Ki, double Kd) {
   }
 
   // for testing purposes print the speed of each motor.
-    Serial.print(speedR);
-    Serial.print(" <- speedR, speedL -> ");
-    Serial.println(speedL);
+    // Serial.print(speedR);
+    // Serial.print(" <- speedR, speedL -> ");
+    // Serial.println(speedL);
 
   // move motors at the correct speed to correct the error.
   move(speedR, speedL);

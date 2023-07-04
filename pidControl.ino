@@ -1,11 +1,24 @@
 #include "pidControl.h"
+#include "clicli.h"
 pidControl controller(2, 3, 5, 6, 7, 8);
 
+clicli mycli(controller);
+
+int setPoint = 50;
+double pv = 0.1;
+double output;
+
 void setup() {
-  Serial.begin(9600);
+  mycli.begin();
 }
 
 void loop() {
-  //controller.steer(50, 100, 1, 0, 0);
-  //delay(1000);
+  mycli.run();
+  // Serial.print(pv);
+  // Serial.print(" ");
+  // Serial.println(setPoint);
+  output = controller.PIDcalc(pv, setPoint, 1, 0, 1);
+  pv += output;
+  delay(10);
+  
 }
