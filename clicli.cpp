@@ -121,6 +121,22 @@ void clicli::run() {
         case 'm': // move
         controller.move(command[1], command[2]);
         break;
+
+        case 'j': // right motor
+        controller.rightMotor(command[1]);
+        break;
+
+        case 'g': // left motor
+        controller.leftMotor(command[1]);
+        break;
+
+        case 'b': // stop moving
+        controller.stopMoving();
+        break;
+
+        case 'y': // yaw
+        Serial.println(controller.getYaw());
+        break;
        message_pos = 0;     //Reset for the next message
       }
    }
