@@ -1,4 +1,6 @@
 #include "pidControl.h"
+#include "Wire.h"
+#include <MPU6050_light.h>
 
 int rMP1; // rightMotorPin1.
 int rMP2; // rightMotorPin2.
@@ -17,6 +19,10 @@ double previousTime = millis();
 double currentTime = millis();
 double deltaTime;
 double out;
+
+// gyro stuff
+double yaw;
+MPU6050 mpu(Wire);
 
 // define variables for goToAngle.
 double tempOut;
@@ -46,8 +52,40 @@ pidControl::pidControl(int inR1, int inR2, int enR, int inL1, int inL2, int enL)
   pinMode(lMPP, OUTPUT);
 }
 
+// begin stuff.
+void pidControl::begin() {
+  Serial.begin(115200);
+  calibrateMPU();
+
+  }
+
+void pidControl::calibrateMPU() {
+  // All kinds of things that need to be done.
+  Wire.begin();
+  
+  byte status = mpu.begin();
+  Serial.print("MPU6050 status: ");
+  Serial.println(status);
+  while (status != 0) { } // Stop everything if could not connect to MPU6050.
+  
+  Serial.println("Calculating offsets, do not move MPU6050");
+  delay(1000);
+  // mpu.upsideDownMounting = true; // Uncomment this line if the MPU6050 is mounted upside-down.
+  mpu.calcOffsets(); // Gyro and accelerometer.
+  Serial.println("Done!\n");
+}
+
 // spins right motor at (speed).
 void pidControl::rightMotor(int speed){
+
+  // digitalWrite(8, HIGH);
+  // digitalWrite(7, LOW);
+  // analogWrite(6, 255);
+
+  // Serial.print(rMPP);
+  // Serial.print(rMP1);
+  // Serial.print(rMP2);
+
   // change motor speed to (speed).
   analogWrite(rMPP, abs(speed));
   // if speed > 0 turn forward.
@@ -83,7 +121,7 @@ void pidControl::move(int rightSpeed, int leftSpeed) {
   rightMotor(rightSpeed);
   leftMotor(leftSpeed);
   Serial.print(rightSpeed);
-  Serial.print(" | ")
+  Serial.print(" | ");
   Serial.println(leftSpeed);
 }
 
@@ -153,8 +191,16 @@ void pidControl::goToAngle(int deg, int speed, double Kp, double Ki, double Kd){
     tempOut = PIDcalc(processValue, deg, Kp, Ki, Kd);
 
     // set motor speeds to be opposite of each other.
-    speedR = (speed + tempOut) * -1;
+    speedR = (speed + tempOut);
     speedL = (speed + tempOut);
+
+    if (tempOut > 0) {
+      speedR *= -1;
+    }
+
+    else {
+      speedL *= -1;
+    }
 
     // cant have a speed over 255.
     if (speedR > 255) {
@@ -183,6 +229,7 @@ void pidControl::goToAngle(int deg, int speed, double Kp, double Ki, double Kd){
     // move both motors at their speed.
     move(speedR, speedL);
   }
+  stopMoving();
 }
 
 // drives at an angle (deg) while correcting itself.
@@ -228,6 +275,10 @@ void pidControl::steer(int deg, int speed, double Kp, double Ki, double Kd) {
 
 // get current yaw angle.
 int pidControl::getYaw(){
-  // for testing return yaw angle of 0˚.
-  return 0;
+  mpu.update();
+  yaw = mpu.getAngleZ()*-1;
+  // if (yaw < 0) {
+  //   yaw += 360; 
+  // }
+  return yaw;
 }
